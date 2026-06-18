@@ -4,11 +4,11 @@
 
 ---
 
-## Overview
+## 🎯 Overview
 
 An AI-powered copilot that helps relationship managers prepare for SME client meetings by automatically analyzing customer health, identifying risks, and surfacing growth opportunities across multiple data sources.
 
-**Business Impact:**
+### Business Impact
 - ⏱️ **80% faster** meeting preparation (from 2 hours to 20 minutes)
 - 📊 **Real-time insights** from financial data, transaction history, and market trends
 - 🎯 **Proactive relationship management** with automated risk alerts
@@ -16,7 +16,7 @@ An AI-powered copilot that helps relationship managers prepare for SME client me
 
 ---
 
-## Architecture
+## 🏗️ Architecture
 
 ### Multi-Agent System (5 Agents)
 ```
@@ -35,7 +35,7 @@ Meeting Prep Orchestrator (Main Agent)
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 - IBM Cloud account with watsonx Orchestrate access
@@ -64,7 +64,7 @@ orchestrate chat ask -n meeting_prep_orchestrator \
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 ### Required Environment Variables
 
@@ -89,7 +89,7 @@ WATSONX_URL=https://us-south.ml.cloud.ibm.com
 
 **Option 1: Use TechZone** (Recommended for demos)
 - Provision environment: [TechZone watsonx Orchestrate](https://techzone.ibm.com)
-- See `TECHZONE_ACCESS_GUIDE.md` for detailed instructions
+- See [`TECHZONE_ACCESS_GUIDE.md`](TECHZONE_ACCESS_GUIDE.md) for detailed instructions
 
 **Option 2: Use Existing Instance**
 1. Access your watsonx Orchestrate instance in IBM Cloud
@@ -98,7 +98,7 @@ WATSONX_URL=https://us-south.ml.cloud.ibm.com
 
 ---
 
-## Demo Scenarios
+## 🎬 Demo Scenarios
 
 ### Pre-loaded Customers (10 Fictional SMEs)
 
@@ -112,7 +112,7 @@ WATSONX_URL=https://us-south.ml.cloud.ibm.com
 
 ### Example Queries
 
-**Scenario 1: High-Value Customer Analysis**
+#### Scenario 1: High-Value Customer Analysis
 ```bash
 orchestrate chat ask -n meeting_prep_orchestrator \
   "Prepare for meeting with CUST-001 (Apex Manufacturing)" -r
@@ -125,7 +125,7 @@ orchestrate chat ask -n meeting_prep_orchestrator \
 - Growth opportunities: Equipment financing ($500K), Trade finance
 - Talking points: 4 actionable recommendations
 
-**Scenario 2: At-Risk Customer**
+#### Scenario 2: At-Risk Customer
 ```bash
 orchestrate chat ask -n meeting_prep_orchestrator \
   "Prepare for meeting with CUST-008 (Quantum Telecom)" -r
@@ -137,7 +137,7 @@ orchestrate chat ask -n meeting_prep_orchestrator \
 - Retention strategies: 3 recommendations
 - Talking points: Risk mitigation focus
 
-**Scenario 3: Growth Opportunity**
+#### Scenario 3: Growth Opportunity
 ```bash
 orchestrate chat ask -n meeting_prep_orchestrator \
   "Prepare for meeting with CUST-005 (Greenfield Healthcare)" -r
@@ -151,7 +151,7 @@ orchestrate chat ask -n meeting_prep_orchestrator \
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```
 demo-BANK-001-sme-meeting-prep/
@@ -179,7 +179,7 @@ demo-BANK-001-sme-meeting-prep/
 
 ---
 
-## Agent Details
+## 🤖 Agent Details
 
 ### Meeting Prep Orchestrator
 **Role**: Main coordinator  
@@ -208,7 +208,7 @@ demo-BANK-001-sme-meeting-prep/
 
 ---
 
-## Tool Details
+## 🛠️ Tool Details
 
 ### 1. fetch_recent_interactions
 Retrieves last 30 days of customer touchpoints including:
@@ -254,7 +254,7 @@ Provides market context:
 
 ---
 
-## Development
+## 💻 Development
 
 ### Local Testing
 
@@ -285,7 +285,7 @@ orchestrate chat ask -n meeting_prep_orchestrator \
 
 ---
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Environment Not Provisioning
 - Check TechZone request status
@@ -318,17 +318,17 @@ orchestrate chat ask -n meeting_prep_orchestrator "test" -r --debug
 
 ---
 
-## Documentation
+## 📚 Documentation
 
-- **TECHZONE_ACCESS_GUIDE.md** - Complete TechZone provisioning guide
-- **ARCHITECTURE.md** - Detailed technical architecture
-- **DEMO_SCRIPT.md** - Presentation guide with timing
+- **[TECHZONE_ACCESS_GUIDE.md](TECHZONE_ACCESS_GUIDE.md)** - Complete TechZone provisioning guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed technical architecture
+- **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** - Presentation guide with timing
 - **[watsonx Orchestrate Docs](https://www.ibm.com/docs/en/watsonx/watson-orchestrate)** - Official documentation
 - **[ADK Documentation](https://ibm.github.io/watsonx-orchestrate-adk-docs/)** - Agent Development Kit
 
 ---
 
-## Use Cases
+## 🎯 Use Cases
 
 ### Commercial Banking
 - SME relationship management
@@ -350,9 +350,9 @@ orchestrate chat ask -n meeting_prep_orchestrator "test" -r --debug
 
 ---
 
-## Roadmap
+## 🗺️ Roadmap
 
-### Phase 1: Core Functionality (Complete)
+### Phase 1: Core Functionality ✅
 - ✅ Multi-agent orchestration
 - ✅ 6 analytical tools
 - ✅ Synthetic data generation
@@ -372,7 +372,7 @@ orchestrate chat ask -n meeting_prep_orchestrator "test" -r --debug
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
 This is a demonstration project. For production use:
 
@@ -385,13 +385,13 @@ This is a demonstration project. For production use:
 
 ---
 
-## License
+## 📄 License
 
 This demo is for IBM internal use and client demonstrations only.
 
 ---
 
-## Support
+## 📞 Support
 
 For questions or issues:
 - **TechZone**: https://techzone.ibm.com/help
