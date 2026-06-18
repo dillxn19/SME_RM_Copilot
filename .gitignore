@@ -1,0 +1,52 @@
+# Environment variables
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# watsonx Orchestrate local cache
+.orchestrate/
+.wxo-cache/
+
+# Credentials (extra safety)
+*credentials*
+*apikey*
+*secret*
+!.env.example
+
+# Made with Bob
