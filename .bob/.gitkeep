@@ -1,0 +1,2 @@
+# This file ensures the .bob directory is tracked in git
+# The mcp.json file contains sensitive tokens and is gitignored
