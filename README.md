@@ -1,403 +1,290 @@
-# SME Relationship Manager AI Copilot
+# SME Relationship Manager AI Copilot Demo
 
-**Multi-Agent AI System for Commercial Banking** | Built with IBM watsonx Orchestrate
+**Built with IBM watsonx Orchestrate**
 
----
-
-## 🎯 Overview
-
-An AI-powered copilot that helps relationship managers prepare for SME client meetings by automatically analyzing customer health, identifying risks, and surfacing growth opportunities across multiple data sources.
-
-### Business Impact
-- ⏱️ **80% faster** meeting preparation (from 2 hours to 20 minutes)
-- 📊 **Real-time insights** from financial data, transaction history, and market trends
-- 🎯 **Proactive relationship management** with automated risk alerts
-- 💰 **Increased revenue** through AI-identified cross-sell opportunities
+A multi-agent AI system that helps relationship managers prepare for SME client meetings by analyzing financial health, monitoring risks, and identifying growth opportunities.
 
 ---
 
-## 🏗️ Architecture
+## 🎯 What This Demo Shows
 
-### Multi-Agent System (5 Agents)
+- **5 AI Agents** working together to prepare for client meetings
+- **Multi-agent orchestration** with watsonx Orchestrate
+- **Real-time financial analysis** and risk monitoring
+- **Professional Carbon Design System UI** with embedded AI chat
+- **Synthetic SME banking data** (5 customers, 6 analysis tools)
+
+---
+
+## 📋 Prerequisites
+
+### 1. Request TechZone Environment via Bob
+
+**Ask Bob to provision a watsonx Orchestrate environment:**
+
 ```
-Meeting Prep Orchestrator (Main Agent)
-├── Customer Intelligence Agent → Recent interactions & sentiment
-├── Customer Health Agent → Financial metrics & health score
-├── Risk Monitoring Agent → Credit alerts & compliance
-└── Growth Opportunity Agent → Product gaps & upsell potential
+"Create a TechZone environment for watsonx Orchestrate in us-south region"
 ```
 
-### Technology Stack
-- **Platform**: IBM watsonx Orchestrate (SaaS)
-- **Model**: Groq OpenAI GPT-OSS-120B
-- **Tools**: 6 Python tools with embedded synthetic data
-- **Data**: 10 fictional SME customers with 90-day history
+Bob will use the TechZone MCP to provision:
+- watsonx Orchestrate (lite)
+- Watson ML
+- Watson Studio
+- watsonx.governance
+- IBM Cloud Code Engine
+- Cloud Object Storage
+
+**Save these from Bob's response:**
+- IBM Cloud API Key
+- Orchestration ID
+- Account details
+
+### 2. Install Required Tools
+
+```bash
+# IBM Cloud CLI
+curl -fsSL https://clis.cloud.ibm.com/install/osx | sh
+
+# watsonx Orchestrate CLI
+pip3 install ibm-watsonx-orchestrate
+
+# Node.js (if not installed)
+brew install node
+```
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- IBM Cloud account with watsonx Orchestrate access
-- `orchestrate` CLI installed ([Installation Guide](https://ibm.github.io/watsonx-orchestrate-adk-docs/))
-- Python 3.9+ (for local tool development)
+### Step 1: Get watsonx Orchestrate API Key
 
-### Deployment (5 minutes)
+1. Login to watsonx Orchestrate:
+   ```
+   https://us-south.watson-orchestrate.cloud.ibm.com
+   ```
+
+2. Click user icon (top right) → **Settings** → **API details** tab
+
+3. Click **"Generate API key"** → Create in IBM Cloud IAM
+
+4. **Copy and save the API key** (you won't see it again!)
+
+### Step 2: Configure Environment
 
 ```bash
-# 1. Clone repository
-git clone <repo-url>
 cd demo-BANK-001-sme-meeting-prep
 
-# 2. Configure credentials
-cp .env.example .env
-# Edit .env with your watsonx Orchestrate credentials
-
-# 3. Deploy all agents and tools
-chmod +x quick-deploy.sh
-./quick-deploy.sh
-
-# 4. Test the demo
-orchestrate chat ask -n meeting_prep_orchestrator \
-  "Prepare for meeting with CUST-001 (Apex Manufacturing)" -r
+# Edit .env with your credentials
+nano .env
 ```
 
----
+Update these values:
+```env
+ORCHESTRATE_API_KEY=<YOUR_WXO_API_KEY>
+ORCHESTRATE_ORCHESTRATION_ID=<FROM_TECHZONE>
+ORCHESTRATE_CRN=<FROM_TECHZONE>
+```
 
-## ⚙️ Configuration
-
-### Required Environment Variables
-
-Create a `.env` file with the following:
+### Step 3: Deploy Agents
 
 ```bash
-# watsonx Orchestrate Connection
-WXO_HOST_URL=https://us-south.watson-orchestrate.cloud.ibm.com
-WXO_ORCHESTRATION_ID=<your-orchestration-id>
-WXO_CRN=<your-cloud-resource-name>
+# Source environment
+source .env
 
-# IBM Cloud Authentication
-IBM_CLOUD_API_KEY=<your-api-key>
+# Configure Orchestrate CLI
+orchestrate env add -n prod \
+  -u https://us-south.watson-orchestrate.cloud.ibm.com \
+  --type ibm_iam
 
-# Optional: watsonx.ai Integration
-WATSONX_API_KEY=<same-as-ibm-cloud-api-key>
-WATSONX_PROJECT_ID=<your-project-id>
-WATSONX_URL=https://us-south.ml.cloud.ibm.com
+# Activate with your API key
+orchestrate env activate prod --api-key "$ORCHESTRATE_API_KEY"
+
+# Deploy agents and tools
+chmod +x import-all.sh
+./import-all.sh
+
+# Verify deployment
+orchestrate agents list
+orchestrate tools list
 ```
 
-### Getting Credentials
+**Expected:** 5 agents and 6 tools deployed
 
-**Option 1: Use TechZone** (Recommended for demos)
-- Provision environment: [TechZone watsonx Orchestrate](https://techzone.ibm.com)
-- See [`TECHZONE_ACCESS_GUIDE.md`](TECHZONE_ACCESS_GUIDE.md) for detailed instructions
-
-**Option 2: Use Existing Instance**
-1. Access your watsonx Orchestrate instance in IBM Cloud
-2. Navigate to instance details to find Orchestration ID and CRN
-3. Generate API key: IBM Cloud → Manage → Access (IAM) → API keys
-
----
-
-## 🎬 Demo Scenarios
-
-### Pre-loaded Customers (10 Fictional SMEs)
-
-| ID | Company | Industry | Health Score | Use Case |
-|----|---------|----------|--------------|----------|
-| CUST-001 | Apex Manufacturing | Manufacturing | 85 | Growth opportunities |
-| CUST-005 | Greenfield Healthcare | Healthcare | 81 | Cross-sell potential |
-| CUST-008 | Quantum Telecom | Telecommunications | 62 | Risk detection |
-
-**All data is synthetic** - no real customer information is used.
-
-### Example Queries
-
-#### Scenario 1: High-Value Customer Analysis
-```bash
-orchestrate chat ask -n meeting_prep_orchestrator \
-  "Prepare for meeting with CUST-001 (Apex Manufacturing)" -r
-```
-
-**Expected Output:**
-- Customer health score: 85/100 (Excellent)
-- Revenue trend: ↑15% YoY
-- Risk alerts: None
-- Growth opportunities: Equipment financing ($500K), Trade finance
-- Talking points: 4 actionable recommendations
-
-#### Scenario 2: At-Risk Customer
-```bash
-orchestrate chat ask -n meeting_prep_orchestrator \
-  "Prepare for meeting with CUST-008 (Quantum Telecom)" -r
-```
-
-**Expected Output:**
-- Customer health score: 62/100 (Watch)
-- Risk alerts: Payment delays, declining revenue
-- Retention strategies: 3 recommendations
-- Talking points: Risk mitigation focus
-
-#### Scenario 3: Growth Opportunity
-```bash
-orchestrate chat ask -n meeting_prep_orchestrator \
-  "Prepare for meeting with CUST-005 (Greenfield Healthcare)" -r
-```
-
-**Expected Output:**
-- Customer health score: 81/100 (Good)
-- Growth indicators: Expansion plans, hiring
-- Cross-sell opportunities: 3 products identified
-- Revenue potential: $150K annual
-
----
-
-## 📁 Repository Structure
-
-```
-demo-BANK-001-sme-meeting-prep/
-├── README.md                          # This file
-├── TECHZONE_ACCESS_GUIDE.md          # TechZone provisioning guide
-├── ARCHITECTURE.md                    # Technical architecture
-├── DEMO_SCRIPT.md                     # Presentation guide
-├── quick-deploy.sh                    # One-command deployment
-├── import-all.sh                      # Manual import script
-├── .env.example                       # Environment template
-├── agents/                            # 5 agent YAML files
-│   ├── meeting_prep_orchestrator.yaml
-│   ├── customer_intelligence_agent.yaml
-│   ├── customer_health_agent.yaml
-│   ├── risk_monitoring_agent.yaml
-│   └── growth_opportunity_agent.yaml
-└── tools/                             # 6 Python tools
-    ├── fetch_recent_interactions.py
-    ├── analyze_financial_health.py
-    ├── calculate_health_score.py
-    ├── check_credit_alerts.py
-    ├── identify_product_gaps.py
-    └── analyze_industry_benchmarks.py
-```
-
----
-
-## 🤖 Agent Details
-
-### Meeting Prep Orchestrator
-**Role**: Main coordinator  
-**Function**: Orchestrates all specialist agents and synthesizes insights  
-**Output**: Comprehensive meeting preparation summary with talking points
-
-### Customer Intelligence Agent
-**Role**: Interaction analysis  
-**Function**: Analyzes recent customer interactions and sentiment  
-**Data Sources**: CRM logs, email history, call transcripts
-
-### Customer Health Agent
-**Role**: Financial analysis  
-**Function**: Evaluates financial metrics and calculates health score  
-**Metrics**: Revenue trends, cash flow, profitability, payment history
-
-### Risk Monitoring Agent
-**Role**: Risk assessment  
-**Function**: Identifies credit risks and compliance issues  
-**Alerts**: Payment delays, credit score changes, regulatory flags
-
-### Growth Opportunity Agent
-**Role**: Revenue optimization  
-**Function**: Identifies cross-sell and upsell opportunities  
-**Analysis**: Product gaps, industry benchmarks, expansion potential
-
----
-
-## 🛠️ Tool Details
-
-### 1. fetch_recent_interactions
-Retrieves last 30 days of customer touchpoints including:
-- Meeting notes and outcomes
-- Email correspondence
-- Phone call summaries
-- Sentiment analysis
-
-### 2. analyze_financial_health
-Analyzes financial metrics:
-- Revenue trends (YoY, QoQ)
-- Cash flow analysis
-- Profitability ratios
-- Working capital trends
-
-### 3. calculate_health_score
-Computes composite health score (0-100) based on:
-- Financial performance (40%)
-- Payment history (30%)
-- Relationship strength (20%)
-- Growth trajectory (10%)
-
-### 4. check_credit_alerts
-Monitors credit and compliance:
-- Credit score changes
-- Payment delays
-- Covenant breaches
-- Regulatory issues
-
-### 5. identify_product_gaps
-Identifies revenue opportunities:
-- Current product usage
-- Available products not utilized
-- Peer comparison
-- Estimated revenue potential
-
-### 6. analyze_industry_benchmarks
-Provides market context:
-- Industry performance metrics
-- Peer comparison
-- Market trends
-- Competitive positioning
-
----
-
-## 💻 Development
-
-### Local Testing
+### Step 4: Configure Frontend
 
 ```bash
-# Test individual tools
-cd tools
-python fetch_recent_interactions.py
-
-# Test agent locally (requires orchestrate CLI)
-orchestrate chat ask -n meeting_prep_orchestrator \
-  "Test query" -r --debug
+# Edit frontend/.env
+nano frontend/.env
 ```
 
-### Adding New Tools
+Update with your values:
+```env
+VITE_WXO_HOST_URL=https://us-south.watson-orchestrate.cloud.ibm.com
+VITE_WXO_ORCHESTRATION_ID=<YOUR_ORCHESTRATION_ID>
+VITE_WXO_CRN=<YOUR_CRN>
+VITE_WXO_AGENT_ID=meeting_prep_orchestrator
+```
 
-1. Create tool in `tools/` directory
-2. Follow Python `@tool` decorator pattern
-3. Include Google-style docstrings
-4. Use synthetic data only
-5. Import via `import-all.sh`
+### Step 5: Start Demo
 
-### Adding New Agents
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-1. Create agent YAML in `agents/` directory
-2. Define `kind: native` and `spec_version: v1`
-3. List required tools in `tools:` section
-4. Deploy via `orchestrate agents deploy`
+**Open:** http://localhost:3000
+
+---
+
+## 🎨 Demo Pages
+
+### 1. Dashboard (`/`)
+- Portfolio KPIs (Total Assets, Risk Score, Growth Opportunities, Active Alerts)
+- Customer health overview
+- Recent activity feed
+
+### 2. Customers (`/customers`)
+- 5 SME customer cards with health scores
+- Financial metrics and risk indicators
+- Quick access to customer details
+
+### 3. AI Assistant (`/ai-chat`)
+- Live watsonx Orchestrate chat interface
+- Multi-agent orchestration in action
+- Real-time analysis and recommendations
+
+---
+
+## 💬 Demo Queries
+
+Try these in the AI Assistant:
+
+```
+"Prepare me for a meeting with TechVenture Solutions"
+
+"What are the top risks in my SME portfolio?"
+
+"Show me growth opportunities for GreenLeaf Manufacturing"
+
+"Analyze the financial health of BlueSky Retail"
+
+"What credit alerts do I need to know about?"
+```
+
+---
+
+## 🤖 Architecture
+
+### AI Agents (5)
+
+1. **Meeting Prep Orchestrator** - Main coordinator
+2. **Customer Health Agent** - Financial analysis
+3. **Risk Monitoring Agent** - Credit & compliance
+4. **Growth Opportunity Agent** - Cross-sell identification
+5. **Customer Intelligence Agent** - Interaction insights
+
+### Tools (6)
+
+1. `analyze_financial_health` - Balance sheet analysis
+2. `calculate_health_score` - Overall health scoring
+3. `check_credit_alerts` - Credit risk monitoring
+4. `fetch_recent_interactions` - Interaction history
+5. `identify_product_gaps` - Product opportunity analysis
+6. `analyze_industry_benchmarks` - Peer comparison
+
+### Tech Stack
+
+- **Backend:** watsonx Orchestrate (multi-agent orchestration)
+- **Frontend:** React 18 + Vite + Carbon Design System v11
+- **Data:** Synthetic SME banking data (5 customers)
+- **Deployment:** IBM Cloud / Local development
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Environment Not Provisioning
-- Check TechZone request status
-- Verify IBM Cloud account quota
-- Contact TechZone support if status shows "Failed"
+### Authentication Expired
 
-### Deployment Fails
+Orchestrate tokens expire every 2 hours. Re-activate:
+
 ```bash
-# Verify orchestrate CLI
-orchestrate --version
+source .env
+orchestrate env activate prod --api-key "$ORCHESTRATE_API_KEY"
+```
 
-# Check environment variables
-cat .env | grep -v "^#" | grep -v "^$"
+### Agents Not Deploying
 
-# Test connection
+```bash
+# Check environment
 orchestrate env list
+
+# Re-activate
+orchestrate env activate prod --api-key "$ORCHESTRATE_API_KEY"
+
+# Try deploying one agent manually
+orchestrate agents import agents/customer_health_agent.yaml
 ```
 
-### Agent Not Responding
-```bash
-# List deployed agents
-orchestrate agents list
+### Frontend Can't Connect
 
-# Check agent details
-orchestrate agents get -n meeting_prep_orchestrator
-
-# View logs
-orchestrate chat ask -n meeting_prep_orchestrator "test" -r --debug
-```
+1. Get correct agent ID: `orchestrate agents list`
+2. Update `frontend/.env` with `VITE_WXO_AGENT_ID`
+3. Restart: `npm run dev`
 
 ---
 
-## 📚 Documentation
+## 📚 Additional Documentation
 
-- **[TECHZONE_ACCESS_GUIDE.md](TECHZONE_ACCESS_GUIDE.md)** - Complete TechZone provisioning guide
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed technical architecture
-- **[DEMO_SCRIPT.md](DEMO_SCRIPT.md)** - Presentation guide with timing
-- **[watsonx Orchestrate Docs](https://www.ibm.com/docs/en/watsonx/watson-orchestrate)** - Official documentation
-- **[ADK Documentation](https://ibm.github.io/watsonx-orchestrate-adk-docs/)** - Agent Development Kit
+- **ARCHITECTURE.md** - Technical architecture details
+- **DEMO_SCRIPT.md** - Presentation guide with timing
+- **PILOT_PLAN.md** - 3-4 week Client Engineering plan
 
 ---
 
-## 🎯 Use Cases
+## ⚠️ Important Notes
 
-### Commercial Banking
-- SME relationship management
-- Credit risk assessment
-- Portfolio management
-- Customer retention
-
-### Wealth Management
-- Client meeting preparation
-- Portfolio review automation
-- Risk profiling
-- Investment recommendations
-
-### Retail Banking
-- Customer service automation
-- Product recommendations
-- Churn prediction
-- Onboarding optimization
+- **All data is synthetic** - No real customer information
+- **TechZone environment expires** - Check expiration date
+- **Orchestrate tokens expire every 2 hours** - Re-activate as needed
+- **IBM Cloud API key ≠ Orchestrate API key** - Get Orchestrate key from UI
 
 ---
 
-## 🗺️ Roadmap
+## ✅ Success Checklist
 
-### Phase 1: Core Functionality ✅
-- ✅ Multi-agent orchestration
-- ✅ 6 analytical tools
-- ✅ Synthetic data generation
-- ✅ Demo scenarios
-
-### Phase 2: Enhanced Integration (Planned)
-- [ ] Real-time CRM integration
-- [ ] Live financial data feeds
-- [ ] Email/calendar integration
-- [ ] Mobile app support
-
-### Phase 3: Advanced Features (Future)
-- [ ] Predictive analytics
-- [ ] Natural language reporting
-- [ ] Voice interface
-- [ ] Multi-language support
+- [ ] TechZone environment provisioned via Bob
+- [ ] watsonx Orchestrate API key generated
+- [ ] Environment configured (.env files)
+- [ ] Orchestrate CLI activated
+- [ ] 5 agents deployed
+- [ ] 6 tools deployed
+- [ ] Frontend configured and running
+- [ ] All 3 pages tested
+- [ ] AI Assistant queries tested
 
 ---
 
-## 🤝 Contributing
+## 🎉 Demo Ready!
 
-This is a demonstration project. For production use:
+Once all checklist items are complete, your demo is ready to present.
 
-1. Replace synthetic data with real data sources
-2. Implement proper authentication and authorization
-3. Add comprehensive error handling
-4. Include monitoring and logging
-5. Conduct security review
-6. Perform load testing
+**Demo URL:** http://localhost:3000
 
----
-
-## 📄 License
-
-This demo is for IBM internal use and client demonstrations only.
+**Built with IBM watsonx Orchestrate**
 
 ---
 
 ## 📞 Support
 
-For questions or issues:
-- **TechZone**: https://techzone.ibm.com/help
-- **watsonx Orchestrate**: https://www.ibm.com/docs/en/watsonx/watson-orchestrate
-- **ADK Documentation**: https://ibm.github.io/watsonx-orchestrate-adk-docs/
+For issues or questions:
+1. Check troubleshooting section above
+2. Review ARCHITECTURE.md for technical details
+3. Consult DEMO_SCRIPT.md for presentation guidance
 
 ---
 
-**Built with IBM watsonx Orchestrate** | Demo Version 1.0
+**Demo Code:** DEMO-BANK-001  
+**Industry:** Financial Services  
+**Use Case:** SME Relationship Management  
+**IBM Products:** watsonx Orchestrate, Watson ML, watsonx.governance
